@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Stack, Typography, Button, Modal, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { firestore } from '@/firebase'
+import FilterComponent from './FilterComponent'
 import {
   collection,
   doc,
@@ -154,7 +155,7 @@ export default function Home() {
         </Box>
       </Modal>
       <FilterComponent onFilter={handleFilter} />
-      
+
       <Button variant="contained" onClick={handleOpen}>
         Add New Item
       </Button>
