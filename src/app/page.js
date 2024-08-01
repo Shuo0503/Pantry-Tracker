@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Box, Stack, Typography, Button, Modal, TextField } from '@mui/material'
+import React, { useState, useEffect } from 'react'
+import { Box, Stack, Typography, Button, Modal, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { firestore } from '@/firebase'
 import {
   collection,
@@ -28,54 +28,88 @@ const style = {
   gap: 3,
 }
 
+const FilterComponent = ({ onFilter }) => {
+  const [name, setName] = useState('');
+  const [category, setCategory] = useState('');
+
+  const handleFilter = () => {
+    onFilter({ name, category });
+  };
+
+  return (
+    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
+      <TextField
+        label="Name"
+        variant="outlined"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <Button variant="contained" color="primary" onClick={handleFilter}>
+        Filter
+      </Button>
+    </div>
+  );
+};
+
 export default function Home() {
-  // We'll add our component logic here
-  const [inventory, setInventory] = useState([])
-  const [open, setOpen] = useState(false)
-  const [itemName, setItemName] = useState('')
+  const [inventory, setInventory] = useState([]);
+  const [filteredInventory, setFilteredInventory] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [itemName, setItemName] = useState('');
 
   const updateInventory = async () => {
-    const snapshot = query(collection(firestore, 'inventory'))
-    const docs = await getDocs(snapshot)
-    const inventoryList = []
+    const snapshot = query(collection(firestore, 'inventory'));
+    const docs = await getDocs(snapshot);
+    const inventoryList = [];
     docs.forEach((doc) => {
-      inventoryList.push({ name: doc.id, ...doc.data() })
-    })
-    setInventory(inventoryList)
-  }
-  
+      inventoryList.push({ name: doc.id, ...doc.data() });
+    });
+    setInventory(inventoryList);
+    setFilteredInventory(inventoryList);
+  };
+
   useEffect(() => {
-    updateInventory()
-  }, [])
+    updateInventory();
+  }, []);
 
   const addItem = async (item) => {
-    const docRef = doc(collection(firestore, 'inventory'), item)
-    const docSnap = await getDoc(docRef)
+    const docRef = doc(collection(firestore, 'inventory'), item);
+    const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      const { quantity } = docSnap.data()
-      await setDoc(docRef, { quantity: quantity + 1 })
+      const { quantity } = docSnap.data();
+      await setDoc(docRef, { quantity: quantity + 1 });
     } else {
-      await setDoc(docRef, { quantity: 1 })
+      await setDoc(docRef, { quantity: 1 });
     }
-    await updateInventory()
-  }
-  
+    await updateInventory();
+  };
+
   const removeItem = async (item) => {
-    const docRef = doc(collection(firestore, 'inventory'), item)
-    const docSnap = await getDoc(docRef)
+    const docRef = doc(collection(firestore, 'inventory'), item);
+    const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      const { quantity } = docSnap.data()
+      const { quantity } = docSnap.data();
       if (quantity === 1) {
-        await deleteDoc(docRef)
+        await deleteDoc(docRef);
       } else {
-        await setDoc(docRef, { quantity: quantity - 1 })
+        await setDoc(docRef, { quantity: quantity - 1 });
       }
     }
-    await updateInventory()
-  }
+    await updateInventory();
+  };
 
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleFilter = (filters) => {
+    const filtered = inventory.filter((item) => {
+      return (
+        (!filters.name || item.name.toLowerCase().includes(filters.name.toLowerCase())) &&
+        (!filters.category || item.category === filters.category)
+      );
+    });
+    setFilteredInventory(filtered);
+  };
 
   return (
     <Box
@@ -109,9 +143,9 @@ export default function Home() {
             <Button
               variant="outlined"
               onClick={() => {
-                addItem(itemName)
-                setItemName('')
-                handleClose()
+                addItem(itemName);
+                setItemName('');
+                handleClose();
               }}
             >
               Add
@@ -119,9 +153,12 @@ export default function Home() {
           </Stack>
         </Box>
       </Modal>
+      <FilterComponent onFilter={handleFilter} />
+      
       <Button variant="contained" onClick={handleOpen}>
         Add New Item
       </Button>
+      
       <Box border={'1px solid #333'}>
         <Box
           width="800px"
@@ -136,7 +173,7 @@ export default function Home() {
           </Typography>
         </Box>
         <Stack width="800px" height="300px" spacing={2} overflow={'auto'}>
-          {inventory.map(({name, quantity}) => (
+          {filteredInventory.map(({ name, quantity }) => (
             <Box
               key={name}
               width="100%"
@@ -153,13 +190,18 @@ export default function Home() {
               <Typography variant={'h3'} color={'#333'} textAlign={'center'}>
                 Quantity: {quantity}
               </Typography>
+              <Stack direction = "row" spacing={2}>
+              <Button variant="contained" onClick={() => addItem(name)}>
+                Add
+              </Button>
               <Button variant="contained" onClick={() => removeItem(name)}>
                 Remove
               </Button>
+              </Stack>
             </Box>
           ))}
         </Stack>
       </Box>
     </Box>
-  )
+  );
 }
