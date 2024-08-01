@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { Box, Stack, Typography, Button, Modal, TextField } from '@mui/material'
-import { firestore } from '@/firebase'
-import { collection, doc, getDocs, query, setDoc, deleteDoc, getDoc } from 'firebase/firestore'
-import FilterComponent from 'src\FilterComponent.js'
+import React, { useState, useEffect } from 'react';
+import { Box, Stack, Typography, Button, Modal, TextField } from '@mui/material';
+import { firestore } from '@/firebase';
+import { collection, doc, getDocs, query, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
+import FilterComponent from '@/src\FilterComponent.js'; 
 
 const style = {
   position: 'absolute',
@@ -19,7 +19,7 @@ const style = {
   display: 'flex',
   flexDirection: 'column',
   gap: 3,
-}
+};
 
 export default function Home() {
   const [inventory, setInventory] = useState([]);
