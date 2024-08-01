@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Stack, Typography, Button, Modal, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { firestore } from '@/firebase'
-import FilterComponent from './FilterComponent'
 import {
   collection,
   doc,
@@ -38,17 +37,31 @@ const FilterComponent = ({ onFilter }) => {
   };
 
   return (
-    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
+    <Box display="flex" gap="1rem" alignItems="center" mb={2}>
       <TextField
         label="Name"
         variant="outlined"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
+      <FormControl variant="outlined">
+        <InputLabel id="category-label">Category</InputLabel>
+        <Select
+          labelId="category-label"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          label="Category"
+        >
+          <MenuItem value=""><em>None</em></MenuItem>
+          <MenuItem value="category1">Category 1</MenuItem>
+          <MenuItem value="category2">Category 2</MenuItem>
+          <MenuItem value="category3">Category 3</MenuItem>
+        </Select>
+      </FormControl>
       <Button variant="contained" color="primary" onClick={handleFilter}>
         Filter
       </Button>
-    </div>
+    </Box>
   );
 };
 
@@ -117,11 +130,14 @@ export default function Home() {
       width="100vw"
       height="100vh"
       display={'flex'}
-      justifyContent={'center'}
       flexDirection={'column'}
       alignItems={'center'}
       gap={2}
     >
+      <FilterComponent onFilter={handleFilter} />
+      <Button variant="contained" onClick={handleOpen}>
+        Add New Item
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -154,12 +170,6 @@ export default function Home() {
           </Stack>
         </Box>
       </Modal>
-      <FilterComponent onFilter={handleFilter} />
-
-      <Button variant="contained" onClick={handleOpen}>
-        Add New Item
-      </Button>
-      
       <Box border={'1px solid #333'}>
         <Box
           width="800px"
@@ -191,14 +201,9 @@ export default function Home() {
               <Typography variant={'h3'} color={'#333'} textAlign={'center'}>
                 Quantity: {quantity}
               </Typography>
-              <Stack direction = "row" spacing={2}>
-              <Button variant="contained" onClick={() => addItem(name)}>
-                Add
-              </Button>
               <Button variant="contained" onClick={() => removeItem(name)}>
                 Remove
               </Button>
-              </Stack>
             </Box>
           ))}
         </Stack>
