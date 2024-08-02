@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, MenuItem } from '@mui/material';
-
-const categories = ['Category 1', 'Category 2', 'Category 3'];
+import { Box, TextField, Button } from '@mui/material';
 
 export default function FilterComponent({ onFilter }) {
-  const [filters, setFilters] = useState({ name: '', category: '' });
+  const [filters, setFilters] = useState({ name: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,22 +22,8 @@ export default function FilterComponent({ onFilter }) {
         value={filters.name}
         onChange={handleChange}
       />
-      <TextField
-        name="category"
-        label="Category"
-        variant="outlined"
-        select
-        value={filters.category}
-        onChange={handleChange}
-      >
-        {categories.map((option) => (
-          <MenuItem key={option} value={option}>
-            {option}
-          </MenuItem>
-        ))}
-      </TextField>
       <Button variant="contained" onClick={handleFilter}>
-        Filter
+        Search
       </Button>
     </Box>
   );
