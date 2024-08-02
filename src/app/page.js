@@ -5,7 +5,6 @@ import { Box, Stack, Typography, Button, Modal, TextField } from '@mui/material'
 import { firestore } from '@/firebase';
 import { collection, doc, getDocs, query, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import FilterComponent from '../components/FilterComponent'; 
-import CameraComponent from '../components/CameraComponent';
 
 const style = {
   position: 'absolute',
@@ -27,7 +26,6 @@ export default function Home() {
   const [filteredInventory, setFilteredInventory] = useState([]);
   const [open, setOpen] = useState(false);
   const [itemName, setItemName] = useState('');
-  const [cameraOpen, setCameraOpen] = useState(false);
 
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, 'inventory'));
@@ -96,10 +94,6 @@ export default function Home() {
       <Button variant="contained" onClick={handleOpen}>
         Add New Item
       </Button>
-      <Button variant="contained" onClick={() => setCameraOpen(!cameraOpen)}>
-        {cameraOpen ? "Hide Camera" : "Show Camera"}
-      </Button>
-      {cameraOpen && <CameraComponent />}
       <Modal
         open={open}
         onClose={handleClose}
