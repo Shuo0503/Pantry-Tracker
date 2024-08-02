@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Stack, Typography, Button, Modal, TextField } from '@mui/material';
 import { firestore } from '@/firebase';
 import { collection, doc, getDocs, query, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
-import FilterComponent from '@/components/FilterComponent'; 
+import FilterComponent from '../components/FilterComponent'; 
 
 const style = {
   position: 'absolute',
