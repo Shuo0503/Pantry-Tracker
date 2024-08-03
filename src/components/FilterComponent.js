@@ -22,7 +22,7 @@ export default function FilterComponent({ onFilter }) {
         value={filters.name}
         onChange={handleChange}
       />
-      <Button variant="contained" onClick={handleFilter}>
+      <Button variant="outlined" onClick={handleFilter}>
         Search
       </Button>
     </Box>

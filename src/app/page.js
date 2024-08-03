@@ -91,7 +91,7 @@ export default function Home() {
       gap={2}
     >
       <FilterComponent onFilter={handleFilter} />
-      <Button variant="contained" onClick={handleOpen}>
+      <Button variant="outlined" onClick={handleOpen} >
         Add New Item
       </Button>
       <Modal
@@ -130,7 +130,7 @@ export default function Home() {
         <Box
           width="800px"
           height="100px"
-          bgcolor={'#ADD8E6'}
+          bgcolor={'#81D8D0'}
           display={'flex'}
           justifyContent={'center'}
           alignItems={'center'}
@@ -139,29 +139,29 @@ export default function Home() {
             Inventory Items
           </Typography>
         </Box>
-        <Stack width="800px" height="300px" spacing={2} overflow={'auto'}>
+        <Stack width="800px" height="400px"  overflow={'auto'}>
           {filteredInventory.map(({ name, quantity }) => (
             <Box
               key={name}
               width="100%"
-              minHeight="150px"
+              minHeight="100px"
               display={'flex'}
               justifyContent={'space-between'}
               alignItems={'center'}
-              bgcolor={'#f0f0f0'}
+              bgcolor={'#ffffff'}
               paddingX={5}
             >
-              <Typography variant={'h3'} color={'#333'} textAlign={'center'}>
+              <Typography variant={'h4'} color={'#333'} textAlign={'center'}>
                 {name.charAt(0).toUpperCase() + name.slice(1)}
               </Typography>
-              <Typography variant={'h3'} color={'#333'} textAlign={'center'}>
+              <Typography variant={'h4'} color={'#333'} textAlign={'center'}>
                 Quantity: {quantity}
               </Typography>
               <Stack direction="row" spacing={2}>
-              <Button variant="contained" onClick={() => addItem(name)}>
+              <Button variant="outlined" onClick={() => addItem(name)}>
                 Add
               </Button>
-              <Button variant="contained" onClick={() => removeItem(name)}>
+              <Button variant="outlined" onClick={() => removeItem(name)}>
                 Remove
               </Button></Stack>
             </Box>
